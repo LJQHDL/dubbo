@@ -59,12 +59,12 @@
       <groupId>org.apache.zookeeper</groupId>
       <artifactId>zookeeper</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.apache.dubbo</groupId>
-      <artifactId>dubbo-remoting-zookeeper-curator5</artifactId>
-      <version>3.3.7-SNAPSHOT</version>
-      <scope>test</scope>
-    </dependency>
+      <dependency>
+          <groupId>org.apache.dubbo</groupId>
+          <artifactId>dubbo-remoting-zookeeper-curator5</artifactId>
+          <version>3.3.7-SNAPSHOT</version>
+          <scope>test</scope>
+      </dependency>
   </dependencies>
 
   <profiles>
