@@ -189,24 +189,12 @@ class ZookeeperMetadataReportTest {
         ServiceMetadataIdentifier serviceMetadataIdentifier =
                 new ServiceMetadataIdentifier(interfaceName, version, group, "provider", revision, protocol);
 
-        // Mock the Zookeeper data
         String encodedUrl = URL.encode(url.toFullString());
-        String nodePath = zookeeperMetadataReport.getNodePath(serviceMetadataIdentifier);
-        // doGetExportedURLs logic: getChildren(root) -> for each child -> getContent(root/child)
-        // Actually, getNodePath returns the FULL path to the file if it's a file.
-        // But doGetExportedURLs is usually for retrieving a list.
-        // Let's check ServiceMetadataIdentifier.
-        // If it's specific, it points to a file.
-        // ZookeeperMetadataReport.doGetExportedURLs:
-        // String path = getNodePath(metadataIdentifier);
-        // List<String> children = zkClient.getChildren(path);
-
-        when(zookeeperClient.getChildren(anyString())).thenReturn(Collections.singletonList("child1"));
         when(zookeeperClient.getContent(anyString())).thenReturn(encodedUrl);
 
         List<String> r = zookeeperMetadataReport.doGetExportedURLs(serviceMetadataIdentifier);
-        assertTrue(r.size() == 1);
-        assertEquals(encodedUrl, r.get(0));
+        assertEquals(1, r.size());
+        assertEquals(url.toFullString(), r.get(0));
     }
 
     @Test
@@ -229,25 +217,6 @@ class ZookeeperMetadataReportTest {
 
         assertEquals(zookeeperMetadataReport.getNodePath(subscriberMetadataIdentifier), pathCaptor.getValue());
         assertEquals(r, contentCaptor.getValue());
-    }
-
-    @Test
-    void testDoGetSubscribedURLs() throws ExecutionException, InterruptedException {
-        // This test was originally checking content.
-        // Since we are mocking, and doSaveSubscriberData calls createOrUpdate,
-        // there is no doGetSubscribedURLs method in the interface?
-        // Wait, the original test name is testDoGetSubscribedURLs but it calls doSaveSubscriberData and then checks
-        // content.
-        // It seems to be testing the "Save" functionality again?
-        // Line 228 in original: testDoGetSubscribedURLs
-        // Line 239: doSaveSubscriberData
-        // Line 241: zkClient.getContent
-        // It does NOT call doGetSubscribedURLs.
-        // So I will just rename/refactor it as another save test or remove it if redundant.
-        // It seems identical to testDoSaveSubscriberData.
-        // I will keep it but clean it up.
-
-        testDoSaveSubscriberData();
     }
 
     @Test
